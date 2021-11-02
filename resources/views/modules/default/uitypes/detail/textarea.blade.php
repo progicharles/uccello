@@ -6,7 +6,7 @@
 <div class="col {{ $isLarge ? 's7 m10' : 's7 m4' }}">
     <?php $value = uitype($field->uitype_id)->getFormattedValueToDisplay($field, $record); ?>
     @if ($value)
-        {!! nl2br($value) !!}
+        {!! nl2br( htmlspecialchars($value) ) !!}
     @else
         &nbsp;
     @endif
