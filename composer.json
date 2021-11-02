@@ -1,8 +1,9 @@
 {
-    "name": "uccello/uccello",
+    "name": "progicharles/uccello",
     "type": "library",
     "description": "Uccello is a Laravel Package for providing a way to make easily complete web applications.",
     "keywords": [
+        "progicharles",
         "uccellolabs",
         "uccello",
         "laravel",
@@ -11,13 +12,19 @@
         "admin",
         "panel"
     ],
-    "homepage": "https://github.com/uccellolabs/uccello",
+    "homepage": "https://github.com/progicharles/uccello",
     "license": "MIT",
     "authors": [
         {
             "name": "Jonathan SARDO",
             "email": "jonathan@uccellolabs.com",
             "homepage": "https://github.com/sardoj",
+            "role": "Developer"
+        },
+        {
+            "name": "PROGI-CH@RLES",
+            "email": "dev@progicharles.com",
+            "homepage": "https://github.com/progicharles",
             "role": "Developer"
         }
     ],
