@@ -1,6 +1,6 @@
 export class Tree {
     constructor() {
-        // this.initJsTree();
+        this.initJsTree();  // TODO: Check incompatibility with import data (see comit: 57293d3c)
     }
 
     initJsTree() {
