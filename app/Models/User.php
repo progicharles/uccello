@@ -343,7 +343,9 @@ class User extends Authenticatable implements Searchable
 
         $subordonateRoles = collect();
         foreach ($roles as $role) {
-            $subordonateRoles = $subordonateRoles->merge($role->findDescendants()->pluck('id'));
+            $subordonateRoles = $subordonateRoles->merge( $role->findDescendants(false)
+                                                            ->where('id','!=', $role->id)
+                                                            ->pluck('id') );
         }
 
         return $subordonateRoles;
@@ -732,6 +734,8 @@ class User extends Authenticatable implements Searchable
                 ];
             }
         }
+
+        // dd($allowedUserUuids);
 
         return $allowedUserUuids;
     }

@@ -26,22 +26,26 @@ class AssignedUser implements Scope
         if ($user && !$user->is_admin) {
             $builder->whereIn($model->getTable().'.assigned_user_id', $user->getAllowedGroupUuids());
 
-            // Records assigned to an user with roles subordonate to the roles of the user
-            $builder->orWhereIn($model->getTable().'.assigned_user_id', function ($query) use ($user) {
-                $entityTable = with(new Entity)->getTable();
-                $privilegesTable = env('UCCELLO_TABLE_PREFIX', 'uccello_').'privileges';
+            // Records assigned to an user with roles subordonate to the roles of the user in the current domain
+            $domain = request('domain');
 
-                $domain = request()->has('domain') ? request('domain') : Domain::first();
-                $subordonateRolesIds = $user->subordonateRolesIdsOnDomain($domain);
-
-                $query->select($entityTable.'.id')
-                    ->from($entityTable)
-                    ->join($privilegesTable, function ($join) use($entityTable, $privilegesTable, $subordonateRolesIds) {
-                        $join->on("$privilegesTable.user_id", '=', $entityTable.'.record_id')
-                        ->whereIn("$privilegesTable.role_id", $subordonateRolesIds);
-                    })
-                    ->where("$entityTable.module_id", ucmodule('user')->id ?? null);
-            });
+            if($domain)
+            {
+                $builder->orWhereIn($model->getTable().'.assigned_user_id', function ($query) use ($user, $domain) {
+                    $entityTable = with(new Entity)->getTable();
+                    $privilegesTable = env('UCCELLO_TABLE_PREFIX', 'uccello_').'privileges';
+    
+                    $subordonateRolesIds = $user->subordonateRolesIdsOnDomain($domain);
+    
+                    $query->select($entityTable.'.id')
+                        ->from($entityTable)
+                        ->join($privilegesTable, function ($join) use($entityTable, $privilegesTable, $subordonateRolesIds) {
+                            $join->on("$privilegesTable.user_id", '=', $entityTable.'.record_id')
+                            ->whereIn("$privilegesTable.role_id", $subordonateRolesIds);
+                        })
+                        ->where("$entityTable.module_id", ucmodule('user')->id ?? null);
+                });
+            }
 
             // Records created by the user
             if (!empty($model->module)) {
