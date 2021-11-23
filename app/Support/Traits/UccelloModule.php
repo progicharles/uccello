@@ -154,6 +154,11 @@ trait UccelloModule
         return $creator;
     }
 
+    public function domain()
+    {
+        return $this->belongsTo(Domain::class);
+    }
+
     public function scopeInDomain($query, ?Domain $domain, $withDescendants = false)
     {
         if (!empty($domain) && Schema::hasColumn($this->table, 'domain_id')) {
